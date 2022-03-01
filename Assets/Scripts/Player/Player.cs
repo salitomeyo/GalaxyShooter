@@ -12,18 +12,19 @@ public class Player : MonoBehaviour
 
     [SerializeField] [Tooltip("Tiempo de carga entre disparos")] [Range(0,2)]
     private float _fireRateTime = 0.25f;
-
     private float _canFire = 0f;
+    private PlayerPowerups _playerPowerups;
+
+    private void Awake() {
+        _playerPowerups = gameObject.GetComponent<PlayerPowerups>();
+    }
 
     void Start()
     {
-        //get the name of the game object
-        Debug.Log(name);
         //set the position of the game object
         transform.position = new Vector3 (0f, 0f, 0f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -60,8 +61,14 @@ public class Player : MonoBehaviour
         {
             if (Time.time > _canFire)
             {
-                Vector3 bulletPosition = transform.position + new Vector3 (0f, 0.88f, 0f);
-                Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
+                if (!(_playerPowerups.canTripleShoot)) {
+                    Vector3 bulletPosition = transform.position + new Vector3 (0f, 0.88f, 0f);
+                    Instantiate(_bulletPrefab, bulletPosition, Quaternion.identity);
+                }
+                else
+                {
+                    _playerPowerups.TripleShoot();
+                }
                 _canFire = Time.time + _fireRateTime;
             }
         }
