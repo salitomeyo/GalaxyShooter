@@ -7,6 +7,9 @@ public class Powerup : MonoBehaviour
     [SerializeField] [Tooltip("Velocidad de movimiento en Y")] [Range(0,10)]
     private float _speed = 2f;
 
+    [SerializeField] [Tooltip("Powerup id")] [Range(0, 2)]
+    private int _powerupId = 0;
+
     void Update()
     {
         transform.Translate(Vector3.up * -_speed * Time.deltaTime);
@@ -19,10 +22,15 @@ public class Powerup : MonoBehaviour
             PlayerPowerups player = other.GetComponent<PlayerPowerups>();
             if (player != null)
             {
-                player.canTripleShoot = true;
+                if (_powerupId == 0)
+                {
+                    player.TripleShootPowerupOn();
+                }
+                else if (_powerupId == 1)
+                {
+                    player.SpeedUpPowerupOn();
+                }
             }
-
-            player.TripleShootPowerupOn();
             Destroy(gameObject);
         }    
     }

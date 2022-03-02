@@ -36,10 +36,20 @@ public class Player : MonoBehaviour
         //obtaining the player input with the input manager
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        //set the translation of the game object to the sides
-        transform.Translate(Vector3.right * Time.deltaTime * horizontalInput * _speed);
-        //set the translation of the game object up or down
-        transform.Translate(Vector3.up * Time.deltaTime * verticalInput * _speed);
+        if (!_playerPowerups.canSpeedUp)
+        {
+            //set the translation of the game object to the sides
+            transform.Translate(Vector3.right * Time.deltaTime * horizontalInput * _speed);
+            //set the translation of the game object up or down
+            transform.Translate(Vector3.up * Time.deltaTime * verticalInput * _speed);
+        }
+        else
+        {
+            //set the translation of the game object to the sides
+            transform.Translate(Vector3.right * Time.deltaTime * horizontalInput * _speed * 2);
+            //set the translation of the game object up or down
+            transform.Translate(Vector3.up * Time.deltaTime * verticalInput * _speed * 2);
+        }
         BarrierControl();
     }
 
