@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] [Tooltip("Velocidad de movimiento del player")] [Range(0,100)]
+    [SerializeField] [Tooltip("Player movement speed")] [Range(0,100)]
     private float _speed = 2.0f;
 
-    [SerializeField] [Tooltip("Prefab del laser")]
+    [SerializeField] [Tooltip("Laser prefab")]
     private GameObject _bulletPrefab; 
 
-    [SerializeField] [Tooltip("Tiempo de carga entre disparos")] [Range(0,2)]
+    [SerializeField] [Tooltip("Fire cooldown time")] [Range(0,2)]
     private float _fireRateTime = 0.25f;
+
+    [SerializeField] [Tooltip("Player lives")]
+    private int _playerLives = 3;
     private float _canFire = 0f;
+    private bool _isDestroyed = false;
+    private Animator _animator;
     private PlayerPowerups _playerPowerups;
 
     private void Awake() {
         _playerPowerups = gameObject.GetComponent<PlayerPowerups>();
+        _animator = gameObject.GetComponent<Animator>();
     }
 
     void Start()
@@ -27,8 +33,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Movement();
-        Shooting();
+        if (!_isDestroyed)
+        {
+            Movement();
+            Shooting();
+        }
     }
 
     private void Movement()
@@ -82,5 +91,23 @@ public class Player : MonoBehaviour
                 _canFire = Time.time + _fireRateTime;
             }
         }
+    }
+
+    public void TakeLife()
+    {
+        _playerLives -= 1;
+
+        if (_playerLives < 1)
+        {
+            StartCoroutine(PlayerExplosionController());
+        }
+    }
+
+    IEnumerator PlayerExplosionController()
+    {
+        _animator.SetTrigger("Explote");
+        _isDestroyed = true;
+        yield return new WaitForSeconds(2.6f);
+        Destroy(gameObject);
     }
 }

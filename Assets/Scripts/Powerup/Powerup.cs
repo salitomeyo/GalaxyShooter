@@ -12,7 +12,7 @@ public class Powerup : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector3.up * -_speed * Time.deltaTime);
+        transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
