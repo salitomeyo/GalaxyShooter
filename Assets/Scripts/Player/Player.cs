@@ -95,11 +95,19 @@ public class Player : MonoBehaviour
 
     public void TakeLife()
     {
-        _playerLives -= 1;
-
-        if (_playerLives < 1)
+        if (!_playerPowerups.hasShield)
         {
-            StartCoroutine(PlayerExplosionController());
+            _playerLives -= 1;
+
+            if (_playerLives < 1)
+            {
+                StartCoroutine(PlayerExplosionController());
+            }
+        }
+        else
+        {
+            _playerPowerups.hasShield = false;
+            _playerPowerups.TurnShieldOff();
         }
     }
 
