@@ -19,10 +19,12 @@ public class Player : MonoBehaviour
     private bool _isDestroyed = false;
     private Animator _animator;
     private PlayerPowerups _playerPowerups;
+    private UIManager _UIManager;
 
     private void Awake() {
         _playerPowerups = gameObject.GetComponent<PlayerPowerups>();
         _animator = gameObject.GetComponent<Animator>();
+        _UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Start()
@@ -98,7 +100,7 @@ public class Player : MonoBehaviour
         if (!_playerPowerups.hasShield)
         {
             _playerLives -= 1;
-
+            _UIManager.UpdateLives(_playerLives);
             if (_playerLives < 1)
             {
                 StartCoroutine(PlayerExplosionController());

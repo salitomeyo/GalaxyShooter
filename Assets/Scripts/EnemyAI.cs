@@ -9,9 +9,11 @@ public class EnemyAI : MonoBehaviour
 
     private Animator _animator;
     private bool _isDestroyed = false;
+    private UIManager _UIManager;
 
     private void Awake() {
         _animator = GetComponent<Animator>();
+        _UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
     void Update()
     {
@@ -46,6 +48,8 @@ public class EnemyAI : MonoBehaviour
         else if (other.tag == "Laser")
         {
             StartCoroutine(ExplotionController());
+            Destroy(other.gameObject);
+            _UIManager.UpdateScore();
         }
     }
 
